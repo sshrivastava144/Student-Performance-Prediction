@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Performance Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+            background-color: #ffffff;
+            color: #003366; /* dark blue color */
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #003366;
+        }
+        .stats-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 50px;
+            flex-wrap: wrap;
+        }
+        .card {
+            background: #ffffff;
+            padding: 25px 35px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #e0e0e0;
+            width: 250px;
+        }
+        .card p {
+            margin: 0;
+            font-size: 16px;
+            color: #666666; /* gray text for labels */
+        }
+        .card span {
+            display: block;
+            margin-top: 12px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #003366; /* dark blue for numbers */
+        }
+        .chart-container {
+            width: 80%;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+        .back-link {
+            display: block;
+            margin-top: 40px;
+            text-align: center;
+            font-size: 18px;
+            text-decoration: none;
+            color: #003366;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Student Performance Dashboard</h2>
+
+    <div class="stats-container">
+        <div class="card">
+            <p>Average Attendance</p>
+            <span id="avgAttendance">--</span>%
+        </div>
+        <div class="card">
+            <p>Average Marks</p>
+            <span id="avgMarks">--</span>
+        </div>
+        <div class="card">
+            <p>Average Percentage</p>
+            <span id="avgPercentage">--</span>%
+        </div>
+    </div>
+
+    <div class="chart-container">
+        <h3 style="text-align: center; margin-bottom: 20px;">Top 5 Students</h3>
+        <canvas id="topStudentsChart" width="600" height="300"></canvas>
+    </div>
+
+    <a href="/" class="back-link">🔙 Back to Prediction Form</a>
+
+    <script>
+        async function loadDashboard() {
+            const response = await fetch('/dashboard_data');
+            const data = await response.json();
+
+            document.getElementById('avgAttendance').textContent = data.average_attendance;
+            document.getElementById('avgMarks').textContent = data.average_marks;
+            document.getElementById('avgPercentage').textContent = data.average_percentage;
+
+            const ctx = document.getElementById('topStudentsChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.top_students.map(student => student.Name),
+                    datasets: [{
+                        label: 'Marks Obtained',
+                        data: data.top_students.map(student => student['Marks Obtained']),
+                        backgroundColor: '#007bff', /* blue bars */
+                        borderColor: '#0056b3', /* darker blue border */
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+
+        loadDashboard();
+    </script>
+
+</body>
+</html>
