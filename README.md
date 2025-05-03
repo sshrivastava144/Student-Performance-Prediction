@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Student Performance Prediction 🎓
 
 This project predicts student performance based on various factors like gender, lunch type, parental education, etc.
@@ -67,3 +68,7 @@ joblib.dump ka use karke hum trained model aur imputer ko files mein save kar ra
 Ye files future mein use ho sakti hain jab hume predictions karni ho ya model ko dubara train nahi karna ho.
 
 venv/
+=======
+# Student-Performance-Prediction
+A machine learning project to predict and analyze student performance based on various factors.
+>>>>>>> ca611b89845831533e3b92d11392e450eb5fdddf
